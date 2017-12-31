@@ -2,7 +2,7 @@ import { schedule, danger, warn, fail, markdown } from "danger"
 
 // Hey there!
 //
-// When a PR is opened, this file gets run. It's notrueo
+// When a PR is opened, this file gets run. It's not very straighforward, but
 // follow the changelog example and ignore the next four const lines.
 // The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
 const isJest = typeof jest !== "undefined"
@@ -27,7 +27,7 @@ export const changelog = wrap("Require changelog entries on PRs with code change
   const rootContents: any = await danger.github.api.repos.getContent(getContentParams)
 
   const hasChangelog = rootContents.data.find((file: any) => changelogs.includes(file.name))
-  const markedTrivial = [pr.title, pr.body].find(s => s.includes("#trivial"))
+  const markedTrivial = (pr.title + pr.body).includes("#trivial")
   if (hasChangelog) {
     const files = [...danger.git.modified_files, ...danger.git.created_files]
 
@@ -40,9 +40,7 @@ export const changelog = wrap("Require changelog entries on PRs with code change
       if (markedTrivial) {
         markdown(baseMessage)
       } else {
-        warn(baseMessage +
-            "If this is a trivial PR that doesn't need a changelog, add #trivial to the PR title."
-        )
+        warn(baseMessage + "If this is a trivial PR that doesn't need a changelog, add #trivial to the PR title.")
       }
     }
   }
