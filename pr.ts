@@ -1,4 +1,4 @@
-import { schedule, danger, warn, fail } from "danger"
+import { schedule, danger, warn, fail, markdown } from "danger"
 
 // Hey there!
 //
@@ -28,7 +28,7 @@ export const changelog = wrap("Require changelog entries on PRs with code change
 
   const hasChangelog = rootContents.data.find((file: any) => changelogs.includes(file.name))
   const markedTrivial = pr.title.match("#trivial")
-  if (hasChangelog && !markedTrivial) {
+  if (hasChangelog) {
     const files = [...danger.git.modified_files, ...danger.git.created_files]
 
     // Look for Swift files that aren't in a unit test directory.
@@ -36,10 +36,14 @@ export const changelog = wrap("Require changelog entries on PRs with code change
     const hasChangelogChanges = files.find(file => changelogs.includes(file))
 
     if (hasCodeChanges && !hasChangelogChanges) {
-      warn(
-        "It looks like code was changed without adding anything to the Changelog." +
-          "If this is a trivial PR that doesn't need a changelog, add #trivial to the PR title."
-      )
+      const baseMessage = "It looks like code was changed without adding anything to the Changelog. "
+      if (markedTrivial) {
+        markdown(baseMessage)
+      } else {
+        warn(baseMessage +
+            "If this is a trivial PR that doesn't need a changelog, add #trivial to the PR title."
+        )
+      }
     }
   }
 })

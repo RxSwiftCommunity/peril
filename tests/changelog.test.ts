@@ -7,6 +7,7 @@ import { changelog } from "../pr"
 beforeEach(() => {
   dm.danger = {}
   dm.warn = jest.fn()
+  dm.markdown = jest.fn()
 })
 
 const pr = {
@@ -111,7 +112,7 @@ it("does nothing when the changelog was changed", () => {
   })
 })
 
-it("does nothing if the PR is marked a #trivial", () => {
+it("sends a message if the PR is marked a #trivial", () => {
   dm.danger.github = {
     api: {
       repos: {
@@ -128,6 +129,6 @@ it("does nothing if the PR is marked a #trivial", () => {
     created_files: [],
   }
   return changelog().then(() => {
-    expect(dm.warn).not.toBeCalled()
+    expect(dm.markdown).toBeCalled()
   })
 })
