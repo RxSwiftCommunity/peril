@@ -1,4 +1,1 @@
-import { markdown, warn } from "danger"
-
-warn("Hello, from Peril!")
-markdown("Testing this too, hi!")
+// We can add hooks for new issues here.
