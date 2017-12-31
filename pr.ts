@@ -40,7 +40,7 @@ export const changelog = wrap("Require changelog entries on PRs with code change
       if (markedTrivial) {
         markdown(baseMessage)
       } else {
-        warn(baseMessage + "If this is a trivial PR that doesn't need a changelog, add #trivial to the PR title.")
+        warn(baseMessage + "If this is a trivial PR that doesn't need a changelog, add #trivial to the PR title or body.")
       }
     }
   }
