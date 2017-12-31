@@ -20,6 +20,7 @@ const pr = {
     },
   },
   title: "This is the pull request title.",
+  body: "",
 }
 
 it("warns when code has changed but no changelog entry was made", () => {
@@ -112,7 +113,7 @@ it("does nothing when the changelog was changed", () => {
   })
 })
 
-it("sends a message if the PR is marked a #trivial", () => {
+it("sends a message if the PR title includes #trivial", () => {
   dm.danger.github = {
     api: {
       repos: {
@@ -122,6 +123,28 @@ it("sends a message if the PR is marked a #trivial", () => {
     pr: {
       ...pr,
       title: "Just fixing some typos #trivial",
+    },
+  }
+  dm.danger.git = {
+    modified_files: ["code.swift"],
+    created_files: [],
+  }
+  return changelog().then(() => {
+    expect(dm.markdown).toBeCalled()
+  })
+})
+
+it("sends a message if the PR body includes #trivial", () => {
+  dm.danger.github = {
+    api: {
+      repos: {
+        getContent: () => Promise.resolve({ data: [{ name: "code.swift" }, { name: "CHANGELOG.md" }] }),
+      },
+    },
+    pr: {
+      ...pr,
+      title: "Just fixing some typos",
+      body: "Nothing fancy, pretty #trivial",
     },
   }
   dm.danger.git = {
