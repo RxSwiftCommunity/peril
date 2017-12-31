@@ -1,8 +1,11 @@
 {
   "settings": {
+    "onlyForOrgMembers": false
   },
   "rules": {
+    "pull_request": "rxswiftcommunity/peril@pr.ts",
+    "issue": "rxswiftcommunity/peril@issue.ts"
   },
-  "repos" : {
+  "repos": {
   }
 }
