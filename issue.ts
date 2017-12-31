@@ -1,5 +1,6 @@
-import { message, warning, danger } from "danger"
+import { markdown, warn, danger } from "danger"
 
-warning("Hello, from Peril!")
+warn("Hello, from Peril!")
+markdown("Testing this too, hi!")
 
 // TODO: Add a check to see if a changelog exists, then warn if it isn't in modified etc
