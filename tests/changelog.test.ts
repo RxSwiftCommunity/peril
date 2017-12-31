@@ -85,7 +85,7 @@ it("does nothing when only `test` files were changed", () => {
     pr,
   }
   dm.danger.git = {
-    modified_files: ["tests/AuctionCalculatorSpec.scala"],
+    modified_files: ["Tests/CalculatorSpec.swift"],
     created_files: [],
   }
   return changelog().then(() => {

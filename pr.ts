@@ -19,6 +19,7 @@ const wrap: any = isJest ? _test : _run
 
 // See: https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts#L67-L85
 export const changelog = wrap("Require changelog entries on PRs with code changes", async () => {
+  // First we check if there is a changelog in the repository.
   const pr = danger.github.pr
   const changelogs = ["CHANGELOG.md", "changelog.md", "Changelog.md", "CHANGELOG.yml"]
 
@@ -29,11 +30,12 @@ export const changelog = wrap("Require changelog entries on PRs with code change
   if (hasChangelog) {
     const files = [...danger.git.modified_files, ...danger.git.created_files]
 
+    // Look for Swift files that aren't in a unit test directory.
     const hasCodeChanges = files.find(file => file.match(/.*\.swift/) && !file.match(/(test|spec)/i))
     const hasChangelogChanges = files.find(file => changelogs.includes(file))
 
     if (hasCodeChanges && !hasChangelogChanges) {
-      warn("It looks like code was changed without adding anything to the Changelog")
+      warn("It looks like code was changed without adding anything to the Changelog.")
     }
   }
 })
