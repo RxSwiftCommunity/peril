@@ -2,7 +2,7 @@ import { schedule, danger, warn, fail } from "danger"
 
 // Hey there!
 //
-// When a PR is opened, this file gets run. It's not straightforward, try to 
+// When a PR is opened, this file gets run. It's not straightforward, try to
 // follow the changelog example and ignore the next four const lines.
 // The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
 const isJest = typeof jest !== "undefined"
@@ -26,16 +26,20 @@ export const changelog = wrap("Require changelog entries on PRs with code change
   const getContentParams = { path: "", owner: pr.head.user.login, repo: pr.head.repo.name }
   const rootContents: any = await danger.github.api.repos.getContent(getContentParams)
 
-  const hasChangelog = rootContents.data.find(file => changelogs.includes(file.name))
-  if (hasChangelog) {
+  const hasChangelog = rootContents.data.find((file: any) => changelogs.includes(file.name))
+  const markedTrivial = pr.title.match("#trivial")
+  if (hasChangelog && !markedTrivial) {
     const files = [...danger.git.modified_files, ...danger.git.created_files]
 
     // Look for Swift files that aren't in a unit test directory.
-    const hasCodeChanges = files.find(file => file.match(/.*\.swift/) && !file.match(/(test|spec)/i))
+    const hasCodeChanges = files.find((file: any) => file.match(/.*\.swift/) && !file.match(/(test|spec)/i))
     const hasChangelogChanges = files.find(file => changelogs.includes(file))
 
     if (hasCodeChanges && !hasChangelogChanges) {
-      warn("It looks like code was changed without adding anything to the Changelog.")
+      warn(
+        "It looks like code was changed without adding anything to the Changelog." +
+          "If this is a trivial PR that doesn't need a changelog, add #trivial to the PR title."
+      )
     }
   }
 })

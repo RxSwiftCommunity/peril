@@ -18,6 +18,7 @@ const pr = {
       name: "danger-js",
     },
   },
+  title: "This is the pull request title.",
 }
 
 it("warns when code has changed but no changelog entry was made", () => {
@@ -74,7 +75,6 @@ it("does nothing when only non-Swift files were changed", () => {
   })
 })
 
-
 it("does nothing when only `test` files were changed", () => {
   dm.danger.github = {
     api: {
@@ -93,7 +93,6 @@ it("does nothing when only `test` files were changed", () => {
   })
 })
 
-
 it("does nothing when the changelog was changed", () => {
   dm.danger.github = {
     api: {
@@ -105,6 +104,27 @@ it("does nothing when the changelog was changed", () => {
   }
   dm.danger.git = {
     modified_files: ["src/index.html", "CHANGELOG.md"],
+    created_files: [],
+  }
+  return changelog().then(() => {
+    expect(dm.warn).not.toBeCalled()
+  })
+})
+
+it("does nothing if the PR is marked a #trivial", () => {
+  dm.danger.github = {
+    api: {
+      repos: {
+        getContent: () => Promise.resolve({ data: [{ name: "code.swift" }, { name: "CHANGELOG.md" }] }),
+      },
+    },
+    pr: {
+      ...pr,
+      title: "Just fixing some typos #trivial",
+    },
+  }
+  dm.danger.git = {
+    modified_files: ["code.swift"],
     created_files: [],
   }
   return changelog().then(() => {
