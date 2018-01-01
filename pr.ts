@@ -1,4 +1,4 @@
-import { schedule, danger, warn, fail, message, markdown, results } from "danger"
+import { schedule, danger, warn, fail, message, markdown, results, Scheduleable } from "danger"
 
 // Hey there!
 //
@@ -6,24 +6,16 @@ import { schedule, danger, warn, fail, message, markdown, results } from "danger
 // remember that they'll be applied to every pull request on every repo in the
 // RxSwiftCommunity organization, so we better write some unit tests!
 //
+// Note that all the rules have to be async functions.
+//
 // Follow the changelog example and ignore the next four const lines.
 // The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
 const isJest = typeof jest !== "undefined"
-// Stores the parameter in a closure that can be invoked in tests.
-const _test = (reason: string, closure: () => void | Promise<any>) =>
-  // We return a closure here so that the (promise is resolved|closure is invoked)
-  // during test time and not when we call rfc().
-  () => (closure instanceof Promise ? closure : Promise.resolve(closure()))
-// Either schedules the promise for execution via Danger, or invokes closure.
-const _run = (reason: string, closure: () => void | Promise<any>) => {
-  console.log("About to run something. Is it a promise? ", closure instanceof Promise)
-  console.log("closure is a ", typeof closure)
-  console.log("Calling schedule (if it's a promise) with: ", closure)
-  closure instanceof Promise ? schedule(closure) : closure()
-}
-
+// Returns the promise itself, for testing.
+const _test = (reason: string, promise: Promise<any>) => promise
+// Schedules the promise for execution via Danger.
+const _run = (reason: string, promise: Promise<any>) => schedule(promise)
 const wrap: any = isJest ? _test : _run
-console.log("Upfront logging. isJest: ", isJest, " wrap: ", wrap, " _run: ", _run)
 
 // Inspiration: https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts#L67-L85
 export const changelog = wrap("Require changelog entries on PRs with code changes", async () => {
@@ -36,27 +28,19 @@ export const changelog = wrap("Require changelog entries on PRs with code change
 
   const hasChangelog = rootContents.data.find((file: any) => changelogs.includes(file.name))
   const markedTrivial = (pr.title + pr.body).includes("#trivial")
-  console.log("hasChangelog: ", hasChangelog, "markedTrivial: ", markedTrivial)
   if (hasChangelog) {
     const files = [...danger.git.modified_files, ...danger.git.created_files]
 
     // Look for Swift files that aren't in a unit test directory.
     const hasCodeChanges = files.find((file: any) => file.match(/.*\.swift/) && !file.match(/(test|spec)/i))
     const hasChangelogChanges = files.find(file => changelogs.includes(file))
-    console.log("hasCodeChanges: ", !!hasCodeChanges, "hasChangelogChanges: ", !!hasChangelogChanges)
-
     if (!!hasCodeChanges && !hasChangelogChanges) {
       const baseMessage = "It looks like code was changed without adding anything to the Changelog. "
       if (markedTrivial) {
-        console.log("markdown'ing")
         markdown(baseMessage)
       } else {
-        console.log("warn'ing")
         warn(baseMessage + "If this is a trivial PR that doesn't need a changelog, add #trivial to the PR title or body.")
       }
-      message("Don't worry, everything is fixable!")
     }
-
-    console.log("results.(markdowns, warns) ", results.markdowns, results.warnings)
   }
 })
