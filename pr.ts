@@ -28,12 +28,14 @@ export const changelog = wrap("Require changelog entries on PRs with code change
 
   const hasChangelog = rootContents.data.find((file: any) => changelogs.includes(file.name))
   const markedTrivial = (pr.title + pr.body).includes("#trivial")
+  console.log("hasChangelog: ", hasChangelog, "markedTrivial: ", markedTrivial)
   if (hasChangelog) {
     const files = [...danger.git.modified_files, ...danger.git.created_files]
 
     // Look for Swift files that aren't in a unit test directory.
     const hasCodeChanges = files.find((file: any) => file.match(/.*\.swift/) && !file.match(/(test|spec)/i))
     const hasChangelogChanges = files.find(file => changelogs.includes(file))
+    console.log("hasCodeChanges: ", hasCodeChanges, "hasChangelogChanges: ", hasChangelogChanges)
 
     if (hasCodeChanges && !hasChangelogChanges) {
       const baseMessage = "It looks like code was changed without adding anything to the Changelog. "
