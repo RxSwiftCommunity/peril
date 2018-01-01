@@ -15,8 +15,12 @@ const _test = (reason: string, closure: () => void | Promise<any>) =>
   // during test time and not when we call rfc().
   () => (closure instanceof Promise ? closure : Promise.resolve(closure()))
 // Either schedules the promise for execution via Danger, or invokes closure.
-const _run = (reason: string, closure: () => void | Promise<any>) =>
+const _run = (reason: string, closure: () => void | Promise<any>) => {
+  console.log("About to run something. Is it a promise? ", closure instanceof Promise)
+  console.log("closure is a ", typeof closure)
+  console.log("Calling schedule (if it's a promise) with: ", closure)
   closure instanceof Promise ? schedule(closure) : closure()
+}
 
 const wrap: any = isJest ? _test : _run
 console.log("Upfront logging. isJest: ", isJest, " wrap: ", wrap, " _run: ", _run)
