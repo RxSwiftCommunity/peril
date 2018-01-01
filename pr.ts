@@ -1,4 +1,4 @@
-import { schedule, danger, warn, fail, markdown } from "danger"
+import { schedule, danger, warn, fail, markdown, results } from "danger"
 
 // Hey there!
 //
@@ -35,16 +35,19 @@ export const changelog = wrap("Require changelog entries on PRs with code change
     // Look for Swift files that aren't in a unit test directory.
     const hasCodeChanges = files.find((file: any) => file.match(/.*\.swift/) && !file.match(/(test|spec)/i))
     const hasChangelogChanges = files.find(file => changelogs.includes(file))
-    console.log("hasCodeChanges: ", hasCodeChanges, "hasChangelogChanges: ", hasChangelogChanges)
+    console.log("hasCodeChanges: ", !!hasCodeChanges, "hasChangelogChanges: ", !!hasChangelogChanges)
 
     if (!!hasCodeChanges && !hasChangelogChanges) {
-      console.log("We're going to markdown or warn", markdown, warn)
       const baseMessage = "It looks like code was changed without adding anything to the Changelog. "
       if (markedTrivial) {
+        console.log("markdown'ing")
         markdown(baseMessage)
       } else {
+        console.log("warn'ing")
         warn(baseMessage + "If this is a trivial PR that doesn't need a changelog, add #trivial to the PR title or body.")
       }
     }
+
+    console.log("results.(markdowns, warns) ", results.markdowns, results.warnings)
   }
 })
