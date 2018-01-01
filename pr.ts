@@ -2,8 +2,11 @@ import { schedule, danger, warn, fail, message, markdown, results } from "danger
 
 // Hey there!
 //
-// When a PR is opened, this file gets run. It's not very straighforward, but
-// follow the changelog example and ignore the next four const lines.
+// When a PR is opened, this file gets run. You can add all your rules here, but
+// remember that they'll be applied to every pull request on every repo in the
+// RxSwiftCommunity organization, so we better write some unit tests!
+//
+// Follow the changelog example and ignore the next four const lines.
 // The inspiration for this is https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts
 const isJest = typeof jest !== "undefined"
 // Stores the parameter in a closure that can be invoked in tests.
@@ -16,10 +19,10 @@ const _run = (reason: string, closure: () => void | Promise<any>) =>
   closure instanceof Promise ? schedule(closure) : closure()
 
 const wrap: any = isJest ? _test : _run
+console.log("Upfront logging. isJest: ", isJest, " wrap: ", wrap, " _run: ", _run)
 
-// See: https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts#L67-L85
-// export const changelog = wrap("Require changelog entries on PRs with code changes", async () => {
-schedule(async () => {
+// Inspiration: https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts#L67-L85
+export const changelog = wrap("Require changelog entries on PRs with code changes", async () => {
   // First we check if there is a changelog in the repository.
   const pr = danger.github.pr
   const changelogs = ["CHANGELOG.md", "changelog.md", "Changelog.md", "CHANGELOG.yml"]
