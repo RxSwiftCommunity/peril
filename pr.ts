@@ -18,7 +18,8 @@ const _run = (reason: string, closure: () => void | Promise<any>) =>
 const wrap: any = isJest ? _test : _run
 
 // See: https://github.com/artsy/artsy-danger/blob/f019ee1a3abffabad65014afabe07cb9a12274e7/org/all-prs.ts#L67-L85
-export const changelog = wrap("Require changelog entries on PRs with code changes", async () => {
+// export const changelog = wrap("Require changelog entries on PRs with code changes", async () => {
+schedule(async () => {
   // First we check if there is a changelog in the repository.
   const pr = danger.github.pr
   const changelogs = ["CHANGELOG.md", "changelog.md", "Changelog.md", "CHANGELOG.yml"]
