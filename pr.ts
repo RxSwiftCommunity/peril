@@ -1,4 +1,4 @@
-import { schedule, danger, warn, fail, markdown, results } from "danger"
+import { schedule, danger, warn, fail, message, markdown, results } from "danger"
 
 // Hey there!
 //
@@ -46,6 +46,7 @@ export const changelog = wrap("Require changelog entries on PRs with code change
         console.log("warn'ing")
         warn(baseMessage + "If this is a trivial PR that doesn't need a changelog, add #trivial to the PR title or body.")
       }
+      message("Don't worry, everything is fixable!")
     }
 
     console.log("results.(markdowns, warns) ", results.markdowns, results.warnings)
