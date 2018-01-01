@@ -37,7 +37,8 @@ export const changelog = wrap("Require changelog entries on PRs with code change
     const hasChangelogChanges = files.find(file => changelogs.includes(file))
     console.log("hasCodeChanges: ", hasCodeChanges, "hasChangelogChanges: ", hasChangelogChanges)
 
-    if (hasCodeChanges && !hasChangelogChanges) {
+    if (!!hasCodeChanges && !hasChangelogChanges) {
+      console.log("We're going to markdown or warn", markdown, warn)
       const baseMessage = "It looks like code was changed without adding anything to the Changelog. "
       if (markedTrivial) {
         markdown(baseMessage)
