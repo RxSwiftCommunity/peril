@@ -3,8 +3,8 @@
     "onlyForOrgMembers": false
   },
   "rules": {
-    "pull_request": "RxSwiftCommunity/peril@pr.ts",
-    "issue": "RxSwiftCommunity/peril@issue.ts"
+    "pull_request": "RxSwiftCommunity/peril@org/all-prs.ts",
+    "issue": "RxSwiftCommunity/peril@org/all-issues.ts"
   },
   "repos": {
   }
