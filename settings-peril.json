@@ -4,7 +4,8 @@
   },
   "rules": {
     "pull_request": "RxSwiftCommunity/peril@org/all-prs.ts",
-    "issue": "RxSwiftCommunity/peril@org/all-issues.ts"
+    "issue": "RxSwiftCommunity/peril@org/all-issues.ts",
+    "pull_request.closed": "RxSwiftCommunity/peril@org/aeryn.ts"
   },
   "repos": {
   }
