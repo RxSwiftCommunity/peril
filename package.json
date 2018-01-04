@@ -6,7 +6,7 @@
   "author": "Ash Furrow <ash@ashfurrow.com>",
   "license": "MIT",
   "scripts": {
-    "precommit": "lint-staged"
+    "precommit": "lint-staged -dd"
   },
   "dependencies": {},
   "devDependencies": {
@@ -38,7 +38,7 @@
     "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json"]
   },
   "lint-staged": {
-    "*.@(ts|tsx)": ["yarn prettier --write", "jest", "git add"],
-    "*.json": ["yarn prettier --write", "git add"]
+    "*.@(ts|tsx)": ["yarn prettier --write --loglevel debug", "jest", "git add"],
+    "*.json": ["yarn prettier --write --loglevel debug", "git add"]
   }
 }
