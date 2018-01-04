@@ -2,9 +2,6 @@
 
 import { schedule, danger, markdown } from "danger"
 
-// TODO: Needed?
-declare const peril: any // danger/danger#351
-
 // Hey there!
 //
 // When a PR is closed, this file gets run. The purpose of this file is to 
