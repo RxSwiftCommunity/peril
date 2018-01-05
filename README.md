@@ -13,6 +13,7 @@ Automatic PR Checking with Peril
 [Peril](https://github.com/Danger/Peril) is a server which runs [Danger-JS](http://danger.systems/js/) automatically, on all pull requests, organization-wide. This repo contains our Danger rules. Danger can check for pull request metadata, commit information, which files were changed, all kinds of things. Here are the things Peril checks on _every_ RxSwiftCommunity repo's pull requests:
 
 - Ensuring that changes to non-test code are reflected in the changelog (if one exists). [PR](https://github.com/RxSwiftCommunity/peril/pull/1)
+- Inviting first-time contributors to join the RxSwiftCommunity organization when their PR is merged. [Discussion](https://github.com/RxSwiftCommunity/contributors/issues/36), [PR](https://github.com/RxSwiftCommunity/peril/pull/4)
 
 If you have an idea for something we should check for in a pull request, or if you have an idea to improve the community using Peril to respond to issues, please [open an issue on the contributors repo](https://github.com/RxSwiftCommunity/contributors/issues/new) so we can discuss!
 
