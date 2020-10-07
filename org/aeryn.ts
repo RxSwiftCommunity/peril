@@ -44,6 +44,6 @@ export const aeryn = wrap("When a PR is merged, check if the author is in the or
     await api.orgs.checkMembership({ org, username })
   } catch (error) {
     markdown(inviteMarkdown)
-    await api.orgs.addOrgMembership({ org, username, role: "member" })
+    await api.orgs.addOrUpdateMembership({ org, username, role: "member" })
   }
 })
