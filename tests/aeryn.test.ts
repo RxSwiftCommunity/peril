@@ -10,9 +10,10 @@ beforeEach(() => {
       pr: {
         user: {
           login: "a_new_user",
+          type: "User",
         },
-      }
-    }
+      },
+    },
   }
   dm.markdown = jest.fn()
 })
@@ -28,11 +29,18 @@ describe("a merged PR", () => {
     dm.danger.github.pr.merged = true
   })
 
+  it("doesn't do anything if the PR was sent by a bot", () => {
+    dm.danger.github.pr.user.type = "Bot"
+    return aeryn().then(() => {
+      expect(dm.markdown).not.toHaveBeenCalled()
+    })
+  })
+
   it("doesn't do anything if the user is already invited", () => {
     dm.danger.github.api = {
       orgs: {
-        checkMembership: async () => { }
-      }
+        checkMembership: async () => {},
+      },
     }
     return aeryn().then(() => {
       expect(dm.markdown).not.toHaveBeenCalled()
@@ -43,9 +51,11 @@ describe("a merged PR", () => {
     const inviteMock = jest.fn()
     dm.danger.github.api = {
       orgs: {
-        checkMembership: async () => { throw new Error("Not a member") },
-        addOrgMembership: inviteMock
-      }
+        checkMembership: async () => {
+          throw new Error("Not a member")
+        },
+        addOrUpdateMembership: inviteMock,
+      },
     }
     return aeryn().then(() => {
       expect(dm.markdown).toHaveBeenCalled()

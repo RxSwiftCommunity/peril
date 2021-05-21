@@ -27,7 +27,7 @@ it("warns when code has changed but no changelog entry was made", () => {
   dm.danger.github = {
     api: {
       repos: {
-        getContent: () => Promise.resolve({ data: [{ name: "code.swift" }, { name: "CHANGELOG.md" }] }),
+        getContents: () => Promise.resolve({ data: [{ name: "code.swift" }, { name: "CHANGELOG.md" }] }),
       },
     },
     pr,
@@ -45,7 +45,7 @@ it("does nothing when there is no changelog file", () => {
   dm.danger.github = {
     api: {
       repos: {
-        getContent: () => Promise.resolve({ data: [{ name: "code.js" }] }),
+        getContents: () => Promise.resolve({ data: [{ name: "code.js" }] }),
       },
     },
     pr,
@@ -63,7 +63,7 @@ it("does nothing when only non-Swift files were changed", () => {
   dm.danger.github = {
     api: {
       repos: {
-        getContent: () => Promise.resolve({ data: [{ name: "CHANGELOG.md" }] }),
+        getContents: () => Promise.resolve({ data: [{ name: "CHANGELOG.md" }] }),
       },
     },
     pr,
@@ -81,7 +81,7 @@ it("does nothing when only `test` files were changed", () => {
   dm.danger.github = {
     api: {
       repos: {
-        getContent: () => Promise.resolve({ data: [{ name: "CHANGELOG.md" }] }),
+        getContents: () => Promise.resolve({ data: [{ name: "CHANGELOG.md" }] }),
       },
     },
     pr,
@@ -99,7 +99,7 @@ it("does nothing when the changelog was changed", () => {
   dm.danger.github = {
     api: {
       repos: {
-        getContent: () => Promise.resolve({ data: [{ name: "code.js" }, { name: "CHANGELOG.md" }] }),
+        getContents: () => Promise.resolve({ data: [{ name: "code.js" }, { name: "CHANGELOG.md" }] }),
       },
     },
     pr,
@@ -117,7 +117,7 @@ it("sends a message if the PR title includes #trivial", () => {
   dm.danger.github = {
     api: {
       repos: {
-        getContent: () => Promise.resolve({ data: [{ name: "code.swift" }, { name: "CHANGELOG.md" }] }),
+        getContents: () => Promise.resolve({ data: [{ name: "code.swift" }, { name: "CHANGELOG.md" }] }),
       },
     },
     pr: {
@@ -138,7 +138,7 @@ it("sends a message if the PR body includes #trivial", () => {
   dm.danger.github = {
     api: {
       repos: {
-        getContent: () => Promise.resolve({ data: [{ name: "code.swift" }, { name: "CHANGELOG.md" }] }),
+        getContents: () => Promise.resolve({ data: [{ name: "code.swift" }, { name: "CHANGELOG.md" }] }),
       },
     },
     pr: {

@@ -4,8 +4,8 @@ import { schedule, danger, markdown } from "danger"
 
 // Hey there!
 //
-// When a PR is closed, this file gets run. The purpose of this file is to 
-// replicate Aeryn (https://github.com/Moya/Aeryn), which invites new 
+// When a PR is closed, this file gets run. The purpose of this file is to
+// replicate Aeryn (https://github.com/Moya/Aeryn), which invites new
 // contributors to join the organization after their first PR gets merged.
 //
 // Ignore the next four const lines.
@@ -27,6 +27,11 @@ export const aeryn = wrap("When a PR is merged, check if the author is in the or
     return
   }
 
+  if (pr.user.type !== "User") {
+    // Ignore PRs from bots.
+    return
+  }
+
   const org = "RxSwiftCommunity"
   const inviteMarkdown = `
   Thanks a lot for contributing @${username}! I've invited you to join the 
@@ -39,7 +44,7 @@ export const aeryn = wrap("When a PR is merged, check if the author is in the or
 
   try {
     // This throws if the user isn't a member of the org yet. If it doesn't
-    // throw, then it means the user was already invited or has already 
+    // throw, then it means the user was already invited or has already
     // accepted the invitation (we ignore the return value here).
     await api.orgs.checkMembership({ org, username })
   } catch (error) {
